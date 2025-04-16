@@ -24,15 +24,25 @@ model Groups {
   id             Int      @id @default(autoincrement())
   groupName      String
   scoringType    String
+  draftType      String
   draftComplete  Boolean  @default(false)
   draftStarted   Boolean  @default(false)
   year           Int
-  groupmembers  GroupMembers[]
+  groupMembers   GroupMembers[]
+  tournamentId   String
 }
 
 model GroupMembers {
+  id       Int    @id @default(autoincrement())
   member   User   @relation(fields: [memberId], references: [id])
   memberId Int
   group    Groups @relation(fields: [groupId], references: [id])
   groupId  Int
+  teamName String
+}
+
+model GroupPlayers {
+  groupMember     GroupMembers     @relation(fields: [groupMemberId], [id])
+  groupMemberId   Int
+  playerId        Int
 }

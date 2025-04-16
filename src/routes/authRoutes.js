@@ -5,7 +5,7 @@ import prisma from '../prismaClient.js'
 
 const router = express.Router()
 
-// Register a new user endpoing /auth/register
+// Register a new user endpoint /auth/register
 router.post('/register', async (req, res) => {
   const { username, password } = req.body
   // save the username and encrypted password
