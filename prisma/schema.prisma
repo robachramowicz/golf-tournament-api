@@ -4,6 +4,9 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// *** RUN MIGRATIONS ***
+// docker compose run app npx prisma migrate dev --name init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,36 +16,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User { 
+model user { 
   id            Int             @id @default(autoincrement())
   username      String          @unique
   password      String
-  groupmembers  GroupMembers[]
+  group_members  group_members[]
 }
 
-model Groups {
-  id             Int      @id @default(autoincrement())
-  groupName      String
-  scoringType    String
-  draftType      String
-  draftComplete  Boolean  @default(false)
-  draftStarted   Boolean  @default(false)
-  year           Int
-  groupMembers   GroupMembers[]
-  tournamentId   String
+model groups {
+  id              Int                @id @default(autoincrement())
+  group_name      String
+  scoring_type    String
+  draft_type      String
+  draft_complete  Boolean            @default(false)
+  draft_started   Boolean            @default(false)
+  year            Int
+  group_members   group_members[]
+  tournament_id   String
 }
 
-model GroupMembers {
-  id       Int    @id @default(autoincrement())
-  member   User   @relation(fields: [memberId], references: [id])
-  memberId Int
-  group    Groups @relation(fields: [groupId], references: [id])
-  groupId  Int
-  teamName String
+model group_members {
+  id        Int                @id @default(autoincrement())
+  member    user               @relation(fields: [memberId], references: [id])
+  member_id Int
+  group     grupos             @relation(fields: [groupId], references: [id])
+  group_id  Int
+  team_name String
+  players   group_players[]
 }
 
-model GroupPlayers {
-  groupMember     GroupMembers     @relation(fields: [groupMemberId], [id])
-  groupMemberId   Int
-  playerId        Int
+model group_players {
+  id               Int              @id @default(autoincrement())
+  group_member     group_members    @relation(fields: [groupMemberId], references: [id])
+  group_member_id  Int
+  player_id        Int
 }

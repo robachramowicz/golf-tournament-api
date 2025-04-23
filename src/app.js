@@ -14,3 +14,6 @@ app.use('/groups', authMiddleware, groupRoutes)
 app.listen(port, () => {
   console.log("Server Listening on port:", port)
 })
+
+
+// docker compose run app npx prisma migrate dev --name init
