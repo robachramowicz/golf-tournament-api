@@ -11,26 +11,26 @@ router.post('/create-group', async (req, res) => {
   try {
     const existingGroup = await prisma.groups.findFirst({
       where: {
-        tournamentId: tournamentId,
-        groupName: groupName,
+        tournament_id: tournamentId,
+        group_name: groupName,
       },
     })
 
     if (existingGroup) {
       return res.status(400).send({ message: 'Group name already exists for this tournament' })
     }
-    console.log('here1')
+    
     const group = await prisma.groups.create({
       data: {
-        tournamentId,
-        groupName,
-        scoringType,
-        year,
-        draftType
+        tournament_id: tournamentId,
+        group_name: groupName,
+        scoring_type: scoringType,
+        year: year,
+        draft_type: draftType
       } 
     })
-    console.log('here2')
-    await prisma.groupMembers.create({
+    
+    await prisma.group_members.create({
       data: {
         member: {
           connect: { id: userId },
@@ -38,7 +38,7 @@ router.post('/create-group', async (req, res) => {
         group: {
           connect: { id: group.id },
         },
-        teamName: teamName,
+        team_name: teamName,
       },
     })
 
@@ -55,7 +55,7 @@ router.get('/user-groups', async (req, res) => {
   try {
     const groups = await prisma.groupMembers.findMany({
       where: {
-        memberId: userId,
+        member_id: userId,
       },
       include: {
         group: true,
